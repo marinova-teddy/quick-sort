@@ -50,5 +50,6 @@ function quicksort(nums, first, last, pivot) {
 function main(arr) {
   let p=0;
   quicksort(arr,0,arr.length-1,p);
+  console.log(checks);
   return sortedNums;
 }
