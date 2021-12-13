@@ -1,16 +1,14 @@
-// let set1 = [2148, 9058, 7742, 3153, 6324, 609, 7628, 5469, 7017, 504];
-// let ex = [44, 88, 77, 22, 66, 11, 99, 55, 00, 33];
-let buf;
 let sortedNums;
 let checks=0;
 
-function quicksort(nums, first, last, pivot) {
-  let p=pivot, i=first-1, j=i+1;
-  if (p<first || p>last) {
-    p=first+p%(last-first+1);
-  }
-  
-  let ans = [];
+function swap(nums, a, b) {
+  let buf = nums[a];
+  nums[a] = nums[b];
+  nums[b] = buf;
+}
+
+function quicksortFirst(nums, first, last) {
+  let ans = [], pivot = first;
   if (first==last) {
     checks++;
     return [nums[first]];
@@ -20,32 +18,20 @@ function quicksort(nums, first, last, pivot) {
     return [];
   }
 
-  if (p==first) {
-    i++; j++;
-  }
-  for (;j<=last;j++) {
-    if (p==last && p==j) continue;
+  let p=pivot, i=first;
+  for (let j=i+1;j<=last;j++) {
     checks++;
     if (nums[j]<nums[p]) {
       i++;
-      if (i<j) {
-        buf=nums[i];
-        nums[i]=nums[j];
-        nums[j]=buf;
-      }
+      if (i<j) swap(nums, j, i)
     }
   }
-  if (p!=first) i++;
-
+  
   checks++;
-  if (i!=p) {
-    buf=nums[i];
-    nums[i]=nums[p];
-    nums[p]=buf;
-  }
+  if (i!=p) swap(nums, i, p)
 
-  front = quicksort( nums, first, i-1, pivot);
-  back = quicksort( nums, i+1, last, pivot);
+  front = quicksortFirst(nums, first, i-1);
+  back = quicksortFirst(nums, i+1, last);
   for (let k=0;k<front.length;k++) {
     ans.push(front[k]);
   }
@@ -58,22 +44,19 @@ function quicksort(nums, first, last, pivot) {
   return ans;
 }
 
-function main(arr) {
-  let p, avChecks;
+function quicksort(nums, first, last, pivot) {
+  swap(nums, pivot, 0)
 
-  for (let k=0;k<10;k++) {
-    p=Math.floor(Math.random()*arr.length);
-    if (p==arr.length) p--; //very rare
-    quicksort(arr,0,arr.length-1,p);
-    if (k==0) {
-      avChecks=checks;
-    } else {
-      avChecks=Math.ceil((avChecks+checks)/2);
-    }
-    checks=0;
+  quicksortFirst(nums, first, last);
+  return nums;
+}
+
+function main(arr) {
+  let copyArr = arr.slice(0);
+  for (let i=0;i<copyArr.length;i++) {
+    console.log(quicksort(copyArr, 0, copyArr.length-1, i));
+    copyArr=arr.slice(0);
   }
-  
-  console.log(avChecks);
   return sortedNums;
 }
 
