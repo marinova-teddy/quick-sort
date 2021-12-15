@@ -1,3 +1,10 @@
+const fs = require("fs");
+let arr;
+fs.readFile('./data-sets/Quick_Sort_Test_Data_Set_1.txt', "utf8", async function(err, data) {
+  arr = data.split("\n").slice(0, -1).map(a => parseInt(a));
+  main(arr);
+});
+
 let sortedNums;
 let checks=0;
 
@@ -23,12 +30,12 @@ function quicksortFirst(nums, first, last) {
     checks++;
     if (nums[j]<nums[p]) {
       i++;
-      if (i<j) swap(nums, j, i)
+      if (i<j) swap(nums, j, i);
     }
   }
   
   checks++;
-  if (i!=p) swap(nums, i, p)
+  if (i!=p) swap(nums, i, p);
 
   front = quicksortFirst(nums, first, i-1);
   back = quicksortFirst(nums, i+1, last);
@@ -51,14 +58,21 @@ function quicksort(nums, first, last, pivot) {
   return nums;
 }
 
+function consoleLog(arr)  {
+  let printedArr = arr[0];
+  for (let i=1;i<arr.length; i++) { 
+    printedArr+=(", "+ arr[i]);
+  }
+  console.log(printedArr);
+}
+
 function main(arr) {
   let copyArr = arr.slice(0);
   for (let i=0;i<copyArr.length;i++) {
-    console.log(quicksort(copyArr, 0, copyArr.length-1, i));
+    if (i==(copyArr.length-1))
+      consoleLog(quicksort(copyArr, 0, copyArr.length-1, i));
     copyArr=arr.slice(0);
   }
+  
   return sortedNums;
 }
-
-// main([44, 88, 77, 22, 66, 11, 99, 55, 00, 33])
-// main([2148, 9058, 7742, 3153, 6324, 609, 7628, 5469, 7017, 504]) 
